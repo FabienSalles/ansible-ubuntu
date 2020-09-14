@@ -19,5 +19,6 @@
 [core]
 	# npm install -g diff-so-fancy cf https://github.com/stevemao/diff-so-fancy
 	pager = diff-so-fancy | less --tabs=1,5 -R
-[user]
-    name = FabienSalles
+
+[includeIf "gitdir:~/projects/github/"]
+  path = .gitconfig-github

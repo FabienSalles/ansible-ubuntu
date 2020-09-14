@@ -1,7 +1,10 @@
 ---
 
-- name: Copy gitconfig file
+- name: Copy dotfiles
   copy:
-    src: ../files/.gitconfig
-    dest: "{{ ansible_env.HOME }}/.gitconfig"
+    src: "../files/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/{{ item }}"
   become_user: "{{ ansible_env.USER }}"
+  with_items:
+    - .gitconfig
+    - .gitconfig-github

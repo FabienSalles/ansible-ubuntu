@@ -14,4 +14,5 @@
   - { role: dbeaver, become: true }
   - { role: spotify, become: true }
   - { role: rambox, become: true }
+  - { role: docker, become: true }
 
