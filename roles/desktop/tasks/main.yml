@@ -1,0 +1,17 @@
+---
+
+- name: Install common desktop packages
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: "{{ aptcachetime }}"
+    pkg:
+      #- bleachbit #Clean Your System and Free Disk Space
+      #- byzanz # screen recording
+      - meld
+      - tilda # terminal lighter than guake
+      - ubuntu-restricted-extras # MP3, Microsoft fonts, Flash plugin, LAME and DVD playback
+      - vlc
+      - xclip # to manipulate the clipboard
+      - filezilla
+      - gparted

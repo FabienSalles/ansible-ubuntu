@@ -1,0 +1,7 @@
+---
+
+- name: Copy gitconfig file
+  copy:
+    src: ../files/.gitconfig
+    dest: "{{ ansible_env.HOME }}/.gitconfig"
+  become_user: "{{ ansible_env.USER }}"

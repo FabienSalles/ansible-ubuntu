@@ -1,0 +1,23 @@
+[alias]
+	st = status -sb
+	co = checkout
+	amend = commit --amend -C HEAD
+	lg = log --pretty=format:\"%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]\" --decorate --date=short
+	undo = reset --soft HEAD^
+	lg1 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+	unchanged = update-index --assume-unchanged
+[color]
+	ui = true
+[help]
+	autocorrect = 1
+[rerere]
+	enabled = true
+[pull]
+	rebase = true
+[credential]
+	helper = cache --timeout=3600
+[core]
+	# npm install -g diff-so-fancy cf https://github.com/stevemao/diff-so-fancy
+	pager = diff-so-fancy | less --tabs=1,5 -R
+[user]
+    name = FabienSalles

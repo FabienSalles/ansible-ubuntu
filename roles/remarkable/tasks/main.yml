@@ -1,0 +1,3 @@
+- name: Install remarkable
+  snap:
+    name: remarkable

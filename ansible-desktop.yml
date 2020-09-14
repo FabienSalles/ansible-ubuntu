@@ -1,0 +1,17 @@
+---
+
+- name: Ubuntu desktop environment playbook
+  hosts: localhost
+  roles:
+  - { role: common, become: true }
+  - { role: desktop, become: true }
+  - { role: dotfiles, become: true }
+  - { role: nodejs, become: true }
+  - { role: remarkable, become: true }
+  - { role: gimp, become: true }
+  - { role: unetbootin, become: true }
+  - { role: phpstorm, become: true }
+  - { role: dbeaver, become: true }
+  - { role: spotify, become: true }
+  - { role: rambox, become: true }
+

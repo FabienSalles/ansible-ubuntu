@@ -1,0 +1,12 @@
+---
+
+- name: Add apt-repository for unetbootin
+  apt_repository:
+    repo: ppa:gezakovacs/ppa
+
+- name: Update packages
+  apt: update_cache=yes cache_valid_time={{ aptcachetime }}
+
+- name: Install unetbootin
+  apt:
+    name: unetbootin

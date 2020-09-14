@@ -1,0 +1,29 @@
+- name: Ensure that Aptitude repositories are up to date
+  apt: update_cache=yes cache_valid_time={{ aptcachetime }}
+
+- name: Install common packages
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: "{{ aptcachetime }}"
+    pkg:
+      - aptitude
+      - build-essential
+      - curl
+      - git
+      - grep
+      - gzip
+      - htop
+      - less
+      - make
+      - rar
+      - software-properties-common
+      - tar
+      - unzip
+      - vim
+      - wget
+      - whois
+      - zip
+
+- name: Upgrade installed packages
+  apt: upgrade=yes

@@ -1,0 +1,3 @@
+- name: Install spotify
+  snap:
+    name: spotify

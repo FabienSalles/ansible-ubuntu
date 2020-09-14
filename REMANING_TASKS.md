@@ -1,0 +1,3 @@
+#PHPStorm
+* sync plugin
+
