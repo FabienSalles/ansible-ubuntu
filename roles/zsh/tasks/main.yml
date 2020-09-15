@@ -1,0 +1,15 @@
+---
+
+- name: Install zsh
+  apt:
+    name: zsh
+
+- name: Install Antigen
+  shell: >
+    sh -c "$(curl -L git.io/antigen > {{ ansible_env.HOME }}/.antigen.zsh)"
+  become_user: "{{ ansible_env.USER }}"
+
+- name: Use Zsh
+  user:
+    name: "{{ ansible_env.USER }}"
+    shell: /bin/zsh

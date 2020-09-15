@@ -1,3 +1,5 @@
+#!/bin/sh
+
 if ! hash ansible >/dev/null 2>&1; then
     echo "Installing Ansible..."
     sudo apt-get update

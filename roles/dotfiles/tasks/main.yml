@@ -8,3 +8,5 @@
   with_items:
     - .gitconfig
     - .gitconfig-github
+    - .zshrc
+    - .antigenrc

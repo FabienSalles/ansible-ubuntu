@@ -22,3 +22,6 @@
 
 [includeIf "gitdir:~/projects/github/"]
   path = .gitconfig-github
+
+[includeIf "gitdir:~/projects/clever/"]
+  path = .gitconfig-clever
