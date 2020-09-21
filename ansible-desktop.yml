@@ -14,7 +14,10 @@
   - { role: phpstorm, become: true }
   - { role: dbeaver, become: true }
   - { role: spotify, become: true }
-  - { role: rambox, become: true }
   - { role: docker, become: true }
+  - { role: openvpn, become: true }
+  - { role: slack, become: true }
+  - { role: rambox, become: true }
+  - { role: postman, become: true }
 
 

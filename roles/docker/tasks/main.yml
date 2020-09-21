@@ -34,3 +34,14 @@
 - name: Install docker-compose
   pip:
     name: docker-compose
+
+- name: Ensure group docker exists
+  group:
+    name: docker
+    state: present
+
+- name: Ad user to docker group
+  user:
+    name: "{{ ansible_env.USER }}"
+    groups: docker
+    append: yes
