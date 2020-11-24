@@ -1,0 +1,16 @@
+---
+
+- name: Install ffmpeg
+  apt:
+    name: ffmpeg
+
+- name: Add apt-repository for obs
+  apt_repository:
+    repo: ppa:obsproject/obs-studio
+
+- name: Update packages
+  apt: update_cache=yes cache_valid_time={{ aptcachetime }}
+
+- name: Install obs
+  apt:
+    name: obs-studio

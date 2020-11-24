@@ -19,5 +19,6 @@
   - { role: slack, become: true }
   - { role: rambox, become: true }
   - { role: postman, become: true }
+  - { role: obs, become: true }
 
 
