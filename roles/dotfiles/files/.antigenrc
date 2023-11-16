@@ -3,8 +3,11 @@ antigen use oh-my-zsh
 
 # Load bundles from the default repo (oh-my-zsh).
 antigen bundle git
+antigen bundle git-commit #https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git-commit
+antigen bundle npm
+antigen bundle nvm
+antigen bundle ubuntu
 antigen bundle command-not-found
-antigen bundle docker
 
 # Load bundles from external repos.
 antigen bundle zsh-users/zsh-completions

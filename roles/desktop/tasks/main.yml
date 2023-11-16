@@ -15,3 +15,5 @@
       - xclip # to manipulate the clipboard
       - filezilla
       - gparted
+      - gnome-tweaks
+      - gnome-shell-extensions
