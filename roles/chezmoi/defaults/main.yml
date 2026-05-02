@@ -1,6 +1,4 @@
 ---
 chezmoi_repo: "git@github.com:conveycode/dotfiles.git"
-chezmoi_age_key_op_ref: "op://Private/chezmoi-age-key/key"
-chezmoi_age_key_path: "{{ ansible_env.HOME }}/.config/chezmoi/key.txt"
 chezmoi_config_path: "{{ ansible_env.HOME }}/.config/chezmoi/chezmoi.toml"
 chezmoi_apply: true

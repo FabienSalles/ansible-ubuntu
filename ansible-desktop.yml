@@ -2,17 +2,17 @@
 - name: Ubuntu desktop environment playbook
   hosts: localhost
   roles:
-    - { role: common, become: true, tags: ['common', 'base'] }
-    - { role: git-lfs, become: true, tags: ['git-lfs', 'base', 'dev'] }
-    - { role: 1password, become: true, tags: ['1password', 'security'] }
-    - { role: zsh, become: true, tags: ['zsh', 'shell'] }
-    - { role: nodejs, become: true, tags: ['nodejs', 'dev'] }
-    - { role: chezmoi, become: true, tags: ['chezmoi', 'dotfiles'] }
+    - { role: common, become: true, tags: ['common', 'base', 'wsl'] }
+    - { role: git-lfs, become: true, tags: ['git-lfs', 'base', 'dev', 'wsl'] }
+    - { role: 1password, become: true, tags: ['1password', 'security', 'wsl'] }
+    - { role: zsh, become: true, tags: ['zsh', 'shell', 'wsl'] }
+    - { role: nodejs, become: true, tags: ['nodejs', 'dev', 'wsl'] }
+    - { role: chezmoi, become: true, tags: ['chezmoi', 'dotfiles', 'wsl'] }
     - { role: docker, become: true, tags: ['docker', 'dev'] }
     - { role: vscode, become: true, tags: ['vscode', 'dev'] }
     - { role: phpstorm, become: true, tags: ['phpstorm', 'dev', 'jetbrains'] }
     - { role: intellij, become: true, tags: ['intellij', 'dev', 'jetbrains'] }
-    - { role: claude-code, become: true, tags: ['claude-code', 'dev', 'ai'] }
+    - { role: claude-code, become: true, tags: ['claude-code', 'dev', 'ai', 'wsl'] }
     #- { role: dbeaver, become: true, tags: ['dbeaver', 'dev'] }
     #- { role: postman, become: true, tags: ['postman', 'dev'] }
     - { role: firefox, become: true, tags: ['firefox', 'browser'] }

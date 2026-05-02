@@ -39,33 +39,6 @@
     msg: "Vous devez vous connecter à 1Password CLI. Exécutez: eval $(op signin)"
   when: op_signed_in.rc != 0
 
-- name: Récupérer la clé age depuis 1Password
-  shell: op read "{{ chezmoi_age_key_op_ref }}"
-  register: age_key
-  become_user: "{{ ansible_env.USER }}"
-  when: op_signed_in.rc == 0
-  no_log: true
-
-- name: Écrire la clé age
-  copy:
-    content: "{{ age_key.stdout }}"
-    dest: "{{ chezmoi_age_key_path }}"
-    mode: '0600'
-    owner: "{{ ansible_env.USER }}"
-  become_user: "{{ ansible_env.USER }}"
-  when:
-    - op_signed_in.rc == 0
-    - age_key.stdout is defined
-  no_log: true
-
-- name: Extraire le recipient age depuis la clé
-  shell: |
-    grep -oP 'public key: \K.*' "{{ chezmoi_age_key_path }}" || age-keygen -y "{{ chezmoi_age_key_path }}"
-  register: age_recipient
-  become_user: "{{ ansible_env.USER }}"
-  when: op_signed_in.rc == 0
-  changed_when: false
-
 - name: Créer la configuration chezmoi
   template:
     src: chezmoi.toml.j2
