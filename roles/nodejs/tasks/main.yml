@@ -1,22 +1,36 @@
 ---
+- name: Vérifier si NVM est installé
+  stat:
+    path: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  register: nvm_installed
+  become_user: "{{ ansible_env.USER }}"
 
-- name: Install nvm
-  shell: >
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm.version }}/install.sh | bash
+- name: Installer NVM
+  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm.version }}/install.sh | bash
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
   become_user: "{{ ansible_env.USER }}"
+  when: not nvm_installed.stat.exists
 
-- name: Install node
-  shell: >
-    source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ nvm.node_version }}
+- name: Installer Node.js
+  shell: |
+    export NVM_DIR="{{ ansible_env.HOME }}/.nvm"
+    . "$NVM_DIR/nvm.sh"
+    nvm install {{ nvm.node_version }}
+    nvm alias default {{ nvm.node_version }}
   args:
     executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.nvm/versions/node"
   become_user: "{{ ansible_env.USER }}"
 
-- name: Install node modules
-  npm:
-    name: "{{ item }}"
-    global: yes
-  with_items: "{{ nvm.node_global_modules }}"
+- name: Installer les modules npm globaux
+  shell: |
+    export NVM_DIR="{{ ansible_env.HOME }}/.nvm"
+    . "$NVM_DIR/nvm.sh"
+    npm install -g {{ item }}
+  args:
+    executable: /bin/bash
+  loop: "{{ nvm.node_global_modules }}"
   become_user: "{{ ansible_env.USER }}"
+  register: npm_install
+  changed_when: "'added' in npm_install.stdout"

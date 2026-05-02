@@ -1,0 +1,23 @@
+---
+- name: Vérifier si Claude Code est installé
+  command: which claude
+  register: claude_installed
+  ignore_errors: true
+  changed_when: false
+
+- name: Installer Claude Code
+  shell: curl -fsSL https://claude.ai/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.claude/local/claude"
+  become_user: "{{ ansible_env.USER }}"
+  when: claude_installed.rc != 0
+
+- name: Vérifier l'installation
+  command: claude --version
+  register: claude_version
+  changed_when: false
+  ignore_errors: true
+
+- name: Afficher la version
+  debug:
+    msg: "Claude Code: {{ claude_version.stdout | default('Installation en cours...') }}"

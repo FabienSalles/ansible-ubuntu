@@ -1,0 +1,5 @@
+---
+- name: Installer Firefox
+  community.general.snap:
+    name: firefox
+    state: present

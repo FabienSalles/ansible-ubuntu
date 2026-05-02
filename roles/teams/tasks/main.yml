@@ -1,0 +1,5 @@
+---
+- name: Installer Teams for Linux
+  community.general.snap:
+    name: teams-for-linux
+    state: present

@@ -1,0 +1,6 @@
+---
+- name: Installer IntelliJ IDEA Community
+  community.general.snap:
+    name: intellij-idea-community
+    classic: true
+    state: present

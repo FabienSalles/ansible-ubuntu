@@ -1,0 +1,92 @@
+---
+- name: Vérifier si chezmoi est installé
+  command: which chezmoi
+  register: chezmoi_installed
+  ignore_errors: true
+  changed_when: false
+
+- name: Installer chezmoi
+  become_user: "{{ ansible_env.USER }}"
+  shell: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b {{ ansible_env.HOME }}/.local/bin
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/bin/chezmoi"
+  when: chezmoi_installed.rc != 0
+
+- name: S'assurer que ~/.local/bin est dans le PATH
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.profile"
+    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    create: yes
+  become_user: "{{ ansible_env.USER }}"
+
+- name: Créer le dossier de configuration chezmoi
+  file:
+    path: "{{ ansible_env.HOME }}/.config/chezmoi"
+    state: directory
+    mode: '0700'
+    owner: "{{ ansible_env.USER }}"
+  become_user: "{{ ansible_env.USER }}"
+
+- name: Vérifier si connecté à 1Password
+  command: op account list
+  register: op_signed_in
+  ignore_errors: true
+  changed_when: false
+  become_user: "{{ ansible_env.USER }}"
+
+- name: Message si non connecté à 1Password
+  debug:
+    msg: "Vous devez vous connecter à 1Password CLI. Exécutez: eval $(op signin)"
+  when: op_signed_in.rc != 0
+
+- name: Récupérer la clé age depuis 1Password
+  shell: op read "{{ chezmoi_age_key_op_ref }}"
+  register: age_key
+  become_user: "{{ ansible_env.USER }}"
+  when: op_signed_in.rc == 0
+  no_log: true
+
+- name: Écrire la clé age
+  copy:
+    content: "{{ age_key.stdout }}"
+    dest: "{{ chezmoi_age_key_path }}"
+    mode: '0600'
+    owner: "{{ ansible_env.USER }}"
+  become_user: "{{ ansible_env.USER }}"
+  when:
+    - op_signed_in.rc == 0
+    - age_key.stdout is defined
+  no_log: true
+
+- name: Extraire le recipient age depuis la clé
+  shell: |
+    grep -oP 'public key: \K.*' "{{ chezmoi_age_key_path }}" || age-keygen -y "{{ chezmoi_age_key_path }}"
+  register: age_recipient
+  become_user: "{{ ansible_env.USER }}"
+  when: op_signed_in.rc == 0
+  changed_when: false
+
+- name: Créer la configuration chezmoi
+  template:
+    src: chezmoi.toml.j2
+    dest: "{{ chezmoi_config_path }}"
+    mode: '0600'
+    owner: "{{ ansible_env.USER }}"
+  become_user: "{{ ansible_env.USER }}"
+  when: op_signed_in.rc == 0
+
+- name: Initialiser chezmoi depuis le repo
+  shell: "{{ ansible_env.HOME }}/.local/bin/chezmoi init {{ chezmoi_repo }}"
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/share/chezmoi/.git"
+  become_user: "{{ ansible_env.USER }}"
+  when: op_signed_in.rc == 0
+
+- name: Appliquer les dotfiles
+  command: "{{ ansible_env.HOME }}/.local/bin/chezmoi apply --force"
+  become_user: "{{ ansible_env.USER }}"
+  when:
+    - op_signed_in.rc == 0
+    - chezmoi_apply
+  register: chezmoi_apply_result
+  changed_when: chezmoi_apply_result.rc == 0

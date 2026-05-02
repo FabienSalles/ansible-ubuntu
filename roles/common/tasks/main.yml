@@ -1,24 +1,31 @@
+---
+# Rôle: Installation des paquets de base
+
 - name: Ensure that Aptitude repositories are up to date
-  apt: update_cache=yes cache_valid_time={{ aptcachetime }}
+  apt:
+    update_cache: true
+    cache_valid_time: "{{ aptcachetime }}"
 
 - name: Install common packages
   apt:
-    state: latest
-    update_cache: yes
+    state: present
+    update_cache: true
     cache_valid_time: "{{ aptcachetime }}"
-    pkg:
+    name:
       - aptitude
       - build-essential
       - curl
       - git
+      - gnupg
       - grep
       - gzip
       - htop
+      - jq
       - less
       - make
-      - rar
       - software-properties-common
       - tar
+      - unrar
       - unzip
       - vim
       - wget
@@ -26,4 +33,6 @@
       - zip
 
 - name: Upgrade installed packages
-  apt: upgrade=yes
+  apt:
+    upgrade: safe
+    update_cache: true

@@ -1,0 +1,8 @@
+encryption = "age"
+
+[age]
+    identity = "{{ chezmoi_age_key_path }}"
+    recipient = "{{ age_recipient.stdout | trim }}"
+
+[data]
+    email = "{{ ansible_env.USER }}@{{ ansible_hostname }}"

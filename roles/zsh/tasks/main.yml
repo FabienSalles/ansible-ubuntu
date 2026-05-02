@@ -1,15 +1,24 @@
 ---
-
-- name: Install zsh
+- name: Installer zsh
   apt:
     name: zsh
+    state: present
 
-- name: Install Antigen
-  shell: >
-    sh -c "$(curl -L git.io/antigen > {{ ansible_env.HOME }}/.antigen.zsh)"
+- name: Vérifier si Antigen existe
+  stat:
+    path: "{{ ansible_env.HOME }}/.antigen.zsh"
+  register: antigen_file
   become_user: "{{ ansible_env.USER }}"
 
-- name: Use Zsh
+- name: Télécharger Antigen
+  get_url:
+    url: https://raw.githubusercontent.com/zsh-users/antigen/master/bin/antigen.zsh
+    dest: "{{ ansible_env.HOME }}/.antigen.zsh"
+    mode: '0644'
+  become_user: "{{ ansible_env.USER }}"
+  when: not antigen_file.stat.exists
+
+- name: Définir Zsh comme shell par défaut
   user:
     name: "{{ ansible_env.USER }}"
     shell: /bin/zsh

@@ -1,0 +1,12 @@
+---
+- name: Installer git-lfs
+  apt:
+    name: git-lfs
+    state: present
+    update_cache: true
+
+- name: Configurer git-lfs
+  command: git lfs install
+  become_user: "{{ ansible_env.USER }}"
+  register: lfs_install
+  changed_when: "'already' not in lfs_install.stdout"

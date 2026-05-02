@@ -1,0 +1,74 @@
+---
+- name: Vérifier si 1Password CLI est installé
+  command: which op
+  register: op_installed
+  ignore_errors: true
+  changed_when: false
+
+- name: Installer les dépendances
+  apt:
+    name: [curl, gnupg]
+    state: present
+  when: op_installed.rc != 0
+
+- name: Créer le dossier keyrings
+  file:
+    path: /usr/share/keyrings
+    state: directory
+    mode: '0755'
+  when: op_installed.rc != 0
+
+- name: Télécharger la clé GPG 1Password
+  shell: |
+    curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | \
+    gpg --dearmor -o /usr/share/keyrings/1password-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/1password-archive-keyring.gpg
+  when: op_installed.rc != 0
+
+- name: Ajouter le dépôt 1Password
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main"
+    filename: 1password
+    state: present
+  when: op_installed.rc != 0
+
+- name: Configurer debsig-verify
+  block:
+    - file:
+        path: /etc/debsig/policies/AC2D62742012EA22
+        state: directory
+        mode: '0755'
+
+    - file:
+        path: /usr/share/debsig/keyrings/AC2D62742012EA22
+        state: directory
+        mode: '0755'
+
+    - get_url:
+        url: https://downloads.1password.com/linux/debian/debsig/1password.pol
+        dest: /etc/debsig/policies/AC2D62742012EA22/1password.pol
+        mode: '0644'
+
+    - copy:
+        src: /usr/share/keyrings/1password-archive-keyring.gpg
+        dest: /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+        remote_src: true
+        mode: '0644'
+  when: op_installed.rc != 0
+
+- name: Installer 1Password CLI
+  apt:
+    name: 1password-cli
+    state: present
+    update_cache: true
+  when: op_installed.rc != 0
+
+- name: Vérifier l'installation
+  command: op --version
+  register: op_version
+  changed_when: false
+
+- name: Afficher la version
+  debug:
+    msg: "1Password CLI: {{ op_version.stdout }}"

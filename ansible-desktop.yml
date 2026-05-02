@@ -1,25 +1,29 @@
 ---
-
 - name: Ubuntu desktop environment playbook
   hosts: localhost
   roles:
-  - { role: common, become: true }
-  #- { role: desktop, become: true }
-  - { role: dotfiles, become: true }
-  - { role: nodejs, become: true }
-  - { role: zsh, become: true }
-  #- { role: remarkable, become: true }
-  - { role: gimp, become: true }
-  #- { role: unetbootin, become: true }
-  - { role: vscode, become: true }
-  #- { role: dbeaver, become: true }
-  - { role: spotify, become: true }
-  - { role: phpstorm, become: true }
-  - { role: docker, become: true }
-  #- { role: openvpn, become: true }
-  - { role: slack, become: true }
-  - { role: rambox, become: true }
-  #- { role: postman, become: true }
-  #- { role: obs, become: true }
-
-
+    - { role: common, become: true, tags: ['common', 'base'] }
+    - { role: git-lfs, become: true, tags: ['git-lfs', 'base', 'dev'] }
+    - { role: 1password, become: true, tags: ['1password', 'security'] }
+    - { role: zsh, become: true, tags: ['zsh', 'shell'] }
+    - { role: nodejs, become: true, tags: ['nodejs', 'dev'] }
+    - { role: chezmoi, become: true, tags: ['chezmoi', 'dotfiles'] }
+    - { role: docker, become: true, tags: ['docker', 'dev'] }
+    - { role: vscode, become: true, tags: ['vscode', 'dev'] }
+    - { role: phpstorm, become: true, tags: ['phpstorm', 'dev', 'jetbrains'] }
+    - { role: intellij, become: true, tags: ['intellij', 'dev', 'jetbrains'] }
+    - { role: claude-code, become: true, tags: ['claude-code', 'dev', 'ai'] }
+    #- { role: dbeaver, become: true, tags: ['dbeaver', 'dev'] }
+    #- { role: postman, become: true, tags: ['postman', 'dev'] }
+    - { role: firefox, become: true, tags: ['firefox', 'browser'] }
+    - { role: gimp, become: true, tags: ['gimp', 'apps'] }
+    - { role: spotify, become: true, tags: ['spotify', 'apps'] }
+    - { role: slack, become: true, tags: ['slack', 'apps', 'communication'] }
+    - { role: teams, become: true, tags: ['teams', 'apps', 'communication'] }
+    - { role: rambox, become: true, tags: ['rambox', 'apps', 'communication'] }
+    #- { role: discord, become: true, tags: ['discord', 'apps'] }
+    #- { role: obs, become: true, tags: ['obs', 'apps'] }
+    #- { role: desktop, become: true, tags: ['desktop', 'system'] }
+    #- { role: openvpn, become: true, tags: ['openvpn', 'system'] }
+    #- { role: unetbootin, become: true, tags: ['unetbootin', 'system'] }
+    #- { role: remarkable, become: true, tags: ['remarkable', 'apps'] }
